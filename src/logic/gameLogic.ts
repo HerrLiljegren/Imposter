@@ -93,10 +93,3 @@ export function nextPlayer(state: GameState): GameState {
 export function getCurrentPlayer(state: GameState): Player {
   return state.players[state.currentPlayerIndex];
 }
-
-/**
- * Checks if the game has completed a full round
- */
-export function hasCompletedRound(state: GameState): boolean {
-  return state.currentPlayerIndex === 0 && state.players.length > 0;
-}

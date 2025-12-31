@@ -63,7 +63,7 @@ export default function SetupScreen({ onStartGame }: SetupScreenProps) {
             value={spyCount}
             onChangeText={setSpyCount}
             keyboardType="number-pad"
-            maxLength={1}
+            maxLength={2}
             selectTextOnFocus
           />
         </View>
