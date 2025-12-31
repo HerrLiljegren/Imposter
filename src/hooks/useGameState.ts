@@ -40,12 +40,15 @@ export const useGameState = () => {
 
   const markCurrentPlayerAsViewed = useCallback(() => {
     setGameState(prev => {
-      const updatedPlayers = [...prev.players];
-      updatedPlayers[prev.currentPlayerIndex].hasSeenRole = true;
-      return {
-        ...prev,
-        players: updatedPlayers,
-      };
+      if (prev.currentPlayerIndex >= 0 && prev.currentPlayerIndex < prev.players.length) {
+        const updatedPlayers = [...prev.players];
+        updatedPlayers[prev.currentPlayerIndex].hasSeenRole = true;
+        return {
+          ...prev,
+          players: updatedPlayers,
+        };
+      }
+      return prev;
     });
   }, []);
 
