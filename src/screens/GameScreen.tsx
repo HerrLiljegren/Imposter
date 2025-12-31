@@ -23,12 +23,16 @@ export const GameScreen: React.FC = () => {
   } = useGameState();
 
   const [numberOfPlayers, setNumberOfPlayers] = useState('4');
+  const [validationError, setValidationError] = useState('');
 
   const handleStartGame = () => {
     const count = parseInt(numberOfPlayers, 10);
-    if (count >= 3 && count <= 10) {
-      initializeGame(count);
+    if (isNaN(count) || count < 3 || count > 10) {
+      setValidationError('Please enter a number between 3 and 10');
+      return;
     }
+    setValidationError('');
+    initializeGame(count);
   };
 
   const handlePeekComplete = () => {
@@ -50,11 +54,18 @@ export const GameScreen: React.FC = () => {
             <TextInput
               style={styles.input}
               value={numberOfPlayers}
-              onChangeText={setNumberOfPlayers}
+              onChangeText={(text) => {
+                setNumberOfPlayers(text);
+                setValidationError('');
+              }}
               keyboardType="number-pad"
               maxLength={2}
               placeholderTextColor="#666"
             />
+
+            {validationError !== '' && (
+              <Text style={styles.errorText}>{validationError}</Text>
+            )}
 
             <Pressable style={styles.startButton} onPress={handleStartGame}>
               <Text style={styles.startButtonText}>Start Game</Text>
@@ -78,6 +89,17 @@ export const GameScreen: React.FC = () => {
   // Passing Phase - Players peek at their roles
   if (gameState.gamePhase === 'passing') {
     const currentPlayer = getCurrentPlayer();
+
+    if (!currentPlayer) {
+      return (
+        <SafeAreaView style={styles.container}>
+          <StatusBar style="light" />
+          <View style={styles.playingContainer}>
+            <Text style={styles.playingText}>Loading...</Text>
+          </View>
+        </SafeAreaView>
+      );
+    }
 
     return (
       <SafeAreaView style={styles.container}>
@@ -179,9 +201,15 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#FFFFFF',
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: 12,
     borderWidth: 2,
     borderColor: '#FFD700',
+  },
+  errorText: {
+    color: '#FF6B6B',
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 12,
   },
   startButton: {
     backgroundColor: '#FFD700',

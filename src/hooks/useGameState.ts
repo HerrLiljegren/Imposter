@@ -79,7 +79,10 @@ export const useGameState = () => {
   }, []);
 
   const getCurrentPlayer = useCallback(() => {
-    return gameState.players[gameState.currentPlayerIndex];
+    if (gameState.players.length === 0) {
+      return null;
+    }
+    return gameState.players[gameState.currentPlayerIndex] || null;
   }, [gameState.players, gameState.currentPlayerIndex]);
 
   return {
